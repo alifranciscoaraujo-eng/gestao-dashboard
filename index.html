@@ -471,7 +471,14 @@ function showTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if(name==='oxr') setTimeout(renderOxR, 50);
+  const rerender = {
+    oxr:     ()=>renderOxR(),
+    icbio:   ()=>renderCompany('icbio',  'kpi-icbio',  'ebitda-icbio',  'ch-icbio-rv','ch-icbio-ebitda','ch-icbio-custos','ch-icbio-breakdown','tbl-icbio-breakdown'),
+    fazenda: ()=>renderCompany('fazenda','kpi-fazenda','ebitda-fazenda', 'ch-faz-rv',  'ch-faz-ebitda',  'ch-faz-custos',  'ch-faz-breakdown',  'tbl-faz-breakdown'),
+    acai:    ()=>renderCompany('acai',   'kpi-acai',  'ebitda-acai',   'ch-acai-rv', 'ch-acai-ebitda', 'ch-acai-custos', 'ch-acai-breakdown', 'tbl-acai-breakdown'),
+    consolidado: ()=>renderConsolidado(),
+  };
+  if(rerender[name]) setTimeout(rerender[name], 50);
 }
 
 // ─── KPI CARD ─────────────────────────────────────────────────────────────────
