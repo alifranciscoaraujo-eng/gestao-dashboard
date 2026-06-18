@@ -114,6 +114,32 @@ body{font-family:'Segoe UI',sans-serif;background:#1a1d27;color:#e0e4f0;min-heig
 .prog-fill{height:100%;border-radius:3px}
 .status-tag{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
 canvas{max-width:100%}
+/* OxR — banner explicativo */
+.oxr-help{background:linear-gradient(90deg,#161a28,#1a1f30);border:1px solid #2a2d3e;border-left:4px solid #4f8ef7;border-radius:10px;padding:14px 18px;margin-bottom:6px}
+.oxr-help-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px}
+.oxr-help-rules{display:flex;gap:22px;flex-wrap:wrap}
+.oxr-rule{display:flex;align-items:center;gap:9px;font-size:12px;color:#c0c8e0;line-height:1.4}
+.oxr-rule .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.oxr-rule strong{color:#fff}
+/* OxR — cards por empresa */
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.emp-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:12px;overflow:hidden;position:relative}
+.emp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--ac,#4f8ef7)}
+.emp-head{padding:14px 16px 11px;border-bottom:1px solid #2a2d3e;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.emp-name{font-size:15px;font-weight:800;color:#fff}
+.emp-sub{font-size:10.5px;color:#8891a6;margin-top:2px}
+.emp-rows{padding:6px 16px 12px}
+.emp-row{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:10px 0;border-bottom:1px solid #1a1d27}
+.emp-row:last-child{border-bottom:none}
+.emp-row-label{font-size:11.5px;font-weight:600;color:#c0c8e0;display:flex;align-items:center;gap:6px}
+.emp-row-icon{font-size:13px}
+.emp-row-vals{text-align:right;font-size:11px;color:#8891a6}
+.emp-row-real{font-size:17px;font-weight:800;line-height:1.1}
+.emp-row-bar{grid-column:1/3;height:6px;background:#2a2d3e;border-radius:3px;overflow:hidden;margin-top:5px}
+.emp-row-bar i{display:block;height:100%;border-radius:3px}
+.emp-pct{font-size:11px;font-weight:800;padding:2px 7px;border-radius:5px}
+.emp-verdict{padding:10px 16px;font-size:11.5px;line-height:1.45;background:#171a26;border-top:1px solid #2a2d3e;display:flex;gap:8px;align-items:flex-start}
+.emp-verdict .vi{font-size:14px;flex-shrink:0}
 /* PLANO DE AÇÃO */
 .plano-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:4px}
 .plano-sum-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:10px;padding:14px;text-align:center;position:relative}
@@ -163,15 +189,15 @@ canvas{max-width:100%}
 </div>
 
 <nav class="tab-nav">
-  <button class="tab-btn active" onclick="showTab('consolidado',this)">Consolidado</button>
+  <button class="tab-btn active" onclick="showTab('oxr',this)">📊 Orçado × Realizado</button>
+  <button class="tab-btn" onclick="showTab('consolidado',this)">Consolidado</button>
   <button class="tab-btn" onclick="showTab('icbio',this)">ICBIO</button>
   <button class="tab-btn" onclick="showTab('fazenda',this)">Fazenda Agro</button>
   <button class="tab-btn" onclick="showTab('acai',this)">Açaí Tia Maria</button>
-  <button class="tab-btn" onclick="showTab('oxr',this)">Orçado × Realizado</button>
 </nav>
 
 <!-- CONSOLIDADO -->
-<div id="tab-consolidado" class="tab-content active">
+<div id="tab-consolidado" class="tab-content">
   <div class="section-title">Resumo Grupo</div>
   <div class="kpi-grid" id="kpi-consolidado"></div>
   <div style="margin-top:12px" id="ebitda-consolidado"></div>
@@ -240,9 +266,20 @@ canvas{max-width:100%}
 </div>
 
 <!-- OxR -->
-<div id="tab-oxr" class="tab-content">
-  <div class="section-title">KPIs de Execução do Orçamento — Jan–Mai 2026</div>
+<div id="tab-oxr" class="tab-content active">
+  <div class="oxr-help">
+    <div class="oxr-help-title">Como ler este painel — Orçado (meta) × Realizado (o que aconteceu)</div>
+    <div class="oxr-help-rules">
+      <div class="oxr-rule"><span class="dot" style="background:#22c55e"></span>
+        <span><strong>Faturamento acima do orçado = ✅ bom.</strong> Vender mais que a meta é positivo (verde).</span></div>
+      <div class="oxr-rule"><span class="dot" style="background:#ef4444"></span>
+        <span><strong>Despesa acima do orçado = ⚠️ ruim.</strong> Gastar mais que o previsto é negativo (vermelho).</span></div>
+    </div>
+  </div>
+  <div class="section-title">Resumo da Execução do Orçamento — Jan–Mai 2026</div>
   <div class="kpi-grid" id="kpi-oxr"></div>
+  <div class="section-title">Detalhamento por Empresa — Faturamento, Despesas e Resultado</div>
+  <div class="emp-grid" id="emp-oxr"></div>
   <div class="section-title">Receita Mensal — Orçado vs Realizado</div>
   <div class="charts-row charts-2">
     <div class="chart-card">
@@ -428,41 +465,57 @@ const BREAKDOWN = {
 };
 
 // ─── OxR DATA ─────────────────────────────────────────────────────────────────
+// Fonte: planilhas ORÇADO × REALIZADO 2026 (abas ORÇAMENTO de cada empresa).
+// Para cada conta: despReal = recReal − resReal (todas as deduções do período).
+// Cruzamento validado linha a linha com as planilhas-base.
 let OXR = {
   meses: ['Jan','Fev','Mar','Abr','Mai'],
   grupo: {
-    recOrc:    [2043317.50, 2043317.50, 2043317.50, 2043317.50, 2043317.50],
-    recReal:   [1929808.46, 1925434.48, 2361178.72, 2032057.95, 1968107.90],
-    custOrc:   [1358224.15, 1358224.15, 1358224.15, 1358224.15, 1358224.15],
-    custReal:  [1178287.71, 1263509.89, 1703790.32, 1275094.36, 1370438.47],
-    investOrc: [374521.56,  374521.56,  374521.56,  374521.56,  374521.56],
-    investReal:[313750.91,  309261.24,  441237.32,  360737.10,  447621.21],
-    finOrc:    [176352.80,  176352.80,  176352.80,  176352.80,  176352.80],
-    finReal:   [55843,      285861,     100000,     190060,     250000],
-    resOrc:    [33884.67,   33884.67,   33884.67,   33884.67,   33884.67],
-    resReal:   [64404.72,   34824.43,   52140.48,   170708.12,  -152654.39],
-    recOrcFY:  24519810,
-    resOrcFY:  406615.99,
+    tipo:'media', // orçado = média mensal do realizado (metodologia da planilha)
+    recOrc:  [2043317.50, 2043317.50, 2043317.50, 2043317.50, 2043317.50],
+    recReal: [1929808.46, 1925434.48, 2361178.72, 2032057.95, 1968107.90],
+    despOrc: [2009432.83, 2009432.83, 2009432.83, 2009432.83, 2009432.83],
+    despReal:[1865403.74, 1890610.05, 2309038.24, 1861349.83, 2120762.29],
+    resOrc:  [33884.67,   33884.67,   33884.67,   33884.67,   33884.67],
+    resReal: [64404.72,   34824.43,   52140.48,   170708.12,  -152654.39],
+    recOrcFY:24519810,
   },
   icbio: {
-    recOrc:    [1700000, 1700000, 1700000, 1700000, 1700000],
-    recReal:   [1466692, 1359600, 1558329, 1384193, 1264942],
-    recOrcFY:  20400000,
+    tipo:'meta', // orçado = meta fixa R$ 1,7M/mês + linhas orçadas de despesa
+    recOrc:  [1700000, 1700000, 1700000, 1700000, 1700000],
+    recReal: [1466691.96, 1359600.48, 1558328.72, 1384192.95, 1264942.30],
+    despOrc: [1317685.03, 1317685.03, 1317685.03, 1317685.03, 1317685.03],
+    despReal:[1312160.96, 1345324.48, 1562456.72, 1366754.95, 1284688.30],
+    resOrc:  [382314.97, 382314.97, 382314.97, 382314.97, 382314.97],
+    resReal: [154531.00, 14276.00, -4128.00, 17438.00, -19746.00],
+    recOrcFY:20400000,
   },
   fazenda: {
-    recOrc:    [299323.50, 382380, 563400, 432740, 467940.60],
-    recReal:   [299323.50, 382380, 563400, 432740, 467940.60],
-    resOrc:    [-6142.50, -6358, 47159.69, 140557, -139497.40],
-    resReal:   [-6142.50, -6358, 47159.69, 140557, -139497.40],
-    recOrcFY:  6842947.95,
+    tipo:'base', // orçado Jan–Mai = realizado (base da planilha); variância só na projeção anual
+    recOrc:  [299323.50, 382380, 563400, 432740, 467940.60],
+    recReal: [299323.50, 382380, 563400, 432740, 467940.60],
+    despOrc: [305466, 388738, 516240.31, 292183, 607438],
+    despReal:[305466, 388738, 516240.31, 292183, 607438],
+    resOrc:  [-6142.50, -6358, 47159.69, 140557, -139497.40],
+    resReal: [-6142.50, -6358, 47159.69, 140557, -139497.40],
+    recOrcFY:6842947.95,
   },
   acai: {
-    recOrc:    [188739.72, 166329.48, 180550, 113709.78, 217876.21],
-    recReal:   [163793, 183454, 239450, 215125, 235225],
-    resOrc:    [-3276.28, -25686.52, -11466, -78306.22, 25860.21],
-    resReal:   [21648.36,  26905.92,  9109,   12714,     6588.50],
-    recOrcFY:  2230525.93,
+    tipo:'proj', // orçado receita = projeção otimista; despesa = média mensal
+    recOrc:  [188739.72, 166329.48, 180550, 113709.78, 217876.21],
+    recReal: [163793, 183454, 239450, 215125, 235225],
+    despOrc: [192016, 192016, 192016, 192016, 192016],
+    despReal:[142144.64, 156548.08, 230341, 202411, 228636.50],
+    resOrc:  [-3276.28, -25686.52, -11466, -78306.22, 25860.21],
+    resReal: [21648.36,  26905.92,  9109,   12714,     6588.50],
+    recOrcFY:2230525.93,
   },
+};
+const EMP_META = {
+  grupo:   {nome:'Grupo Total Energia', cor:'#4f8ef7', nota:'Orçado = média mensal do período (referência)'},
+  icbio:   {nome:'ICBIO',               cor:'#f97316', nota:'Meta fixa de R$ 1,7M/mês'},
+  fazenda: {nome:'Fazenda Agro',        cor:'#22c55e', nota:'Orçado Jan–Mai = realizado (base da planilha)'},
+  acai:    {nome:'Açaí Tia Maria',      cor:'#a855f7', nota:'Meta de faturamento = projeção otimista 2026'},
 };
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
@@ -684,171 +737,213 @@ function renderConsolidado() {
 // ─── RENDER OxR ───────────────────────────────────────────────────────────────
 function renderOxR() {
   const ox = OXR;
+  const S = a => a.reduce((s,v)=>s+v,0);
 
-  function sumArr(a) { return a.reduce((s,v)=>s+v,0); }
-  function sevRec(ep) {
-    if(ep>=1.02) return 'superado';
-    if(ep>=1)    return 'ok';
-    if(ep>=0.85) return 'atencao';
-    return 'critico';
+  // métrica: compara realizado vs orçado conforme o tipo de conta
+  // kind: 'rev' (faturamento — mais é bom) | 'exp' (despesa — menos é bom) | 'res' (resultado)
+  function metric(real, orc, kind) {
+    const pct = orc !== 0 ? real/orc : (real===0?1:99);
+    let color, txt;
+    if(kind==='rev'){
+      if(pct>=1.02){color='#4ade80'; txt='acima da meta';}
+      else if(pct>=0.999){color='#22c55e'; txt='na meta';}
+      else if(pct>=0.85){color='#f59e0b'; txt='abaixo da meta';}
+      else {color='#ef4444'; txt='muito abaixo';}
+    } else if(kind==='exp'){
+      if(pct<=1.001){color='#22c55e'; txt='dentro do orçado';}
+      else if(pct<=1.05){color='#f59e0b'; txt='pouco acima';}
+      else {color='#ef4444'; txt='acima do orçado';}
+    } else {
+      color = real>=0 ? (real>=orc-1?'#22c55e':'#f59e0b') : '#ef4444';
+      txt = real>=0 ? (real>=orc-1?'acima do previsto':'positivo (abaixo do previsto)') : 'negativo';
+    }
+    return {pct, color, txt};
   }
-  function sevColor(sev) {
-    return sev==='superado'?'#4ade80':sev==='ok'?C.green:sev==='atencao'?C.yellow:C.red;
-  }
-  function sevTag(sev) {
-    return sev==='superado'?'badge-green':sev==='ok'?'badge-green':sev==='atencao'?'badge-yellow':'badge-red';
-  }
-  function sevTxt(sev) {
-    return sev==='superado'?'Superado':sev==='ok'?'OK':sev==='atencao'?'Atencao':'Critico';
-  }
 
-  const grpRecOrc  = sumArr(ox.grupo.recOrc);
-  const grpRecReal = sumArr(ox.grupo.recReal);
-  const grpResOrc  = sumArr(ox.grupo.resOrc);
-  const grpResReal = sumArr(ox.grupo.resReal);
+  // YTD por empresa
+  const emp = {};
+  ['icbio','acai','fazenda','grupo'].forEach(k=>{
+    const c = ox[k];
+    emp[k] = {
+      recOrc:S(c.recOrc), recReal:S(c.recReal),
+      despOrc:S(c.despOrc), despReal:S(c.despReal),
+      resOrc:S(c.resOrc), resReal:S(c.resReal),
+      recOrcFY:c.recOrcFY, tipo:c.tipo,
+    };
+  });
 
-  const icbRecOrc  = sumArr(ox.icbio.recOrc);
-  const icbRecReal = sumArr(ox.icbio.recReal);
-  const icbEp      = icbRecReal / icbRecOrc;
-  const icbSev     = sevRec(icbEp);
-
-  const acaiRecOrc  = sumArr(ox.acai.recOrc);
-  const acaiRecReal = sumArr(ox.acai.recReal);
-  const acaiEp      = acaiRecReal / acaiRecOrc;
-  const acaiSev     = sevRec(acaiEp);
-
-  const fazRecOrc  = sumArr(ox.fazenda.recOrc);
-  const fazRecReal = sumArr(ox.fazenda.recReal);
-
-  // KPIs
-  const grpEp = grpRecReal / grpRecOrc;
+  // ── KPIs ──
+  const g=emp.grupo, ic=emp.icbio, ac=emp.acai;
+  const gEp=g.recReal/g.recOrc, icEp=ic.recReal/ic.recOrc, acEp=ac.recReal/ac.recOrc;
+  function kbadge(ep){return ep>=1?'badge-green':ep>=.85?'badge-yellow':'badge-red';}
   document.getElementById('kpi-oxr').innerHTML =
-    kpiCard('Receita Grupo Jan-Mai', fmtR(grpRecReal), 'Orcado: '+fmtR(grpRecOrc), C.blue,
-      pct(grpEp)+' atingido', grpEp>=1?'badge-green':grpEp>=.85?'badge-yellow':'badge-red') +
-    kpiCard('ICBIO — Meta R$ 1,7M/mes', fmtR(icbRecReal), 'Orcado Jan-Mai: '+fmtR(icbRecOrc), C.orange,
-      pct(icbEp)+' atingido', sevTag(icbSev)) +
-    kpiCard('Acai Tia Maria', fmtR(acaiRecReal), 'Orcado Jan-Mai: '+fmtR(acaiRecOrc),
-      acaiEp>=1?C.green:C.red,
-      pct(acaiEp)+' atingido', sevTag(acaiSev)) +
-    kpiCard('Resultado Grupo Jan-Mai', fmtR(grpResReal), 'Orcado: '+fmtR(grpResOrc),
-      grpResReal>=0?C.green:C.red,
-      grpResReal>=0?'Positivo':'Negativo', grpResReal>=0?'badge-green':'badge-red');
+    kpiCard('Faturamento do Grupo', fmtR(g.recReal), 'Meta Jan–Mai: '+fmtR(g.recOrc), C.blue,
+      pct(gEp)+' da meta', kbadge(gEp)) +
+    kpiCard('ICBIO — Meta R$ 1,7M/mês', fmtR(ic.recReal), 'Meta Jan–Mai: '+fmtR(ic.recOrc), C.orange,
+      pct(icEp)+' da meta', kbadge(icEp)) +
+    kpiCard('Açaí Tia Maria', fmtR(ac.recReal), 'Meta Jan–Mai: '+fmtR(ac.recOrc), C.purple,
+      pct(acEp)+' da meta', kbadge(acEp)) +
+    kpiCard('Resultado do Grupo', fmtR(g.resReal), 'Previsto: '+fmtR(g.resOrc),
+      g.resReal>=0?C.green:C.red, g.resReal>=0?'Positivo':'Negativo', g.resReal>=0?'badge-green':'badge-red');
 
-  // Grupo receita mensal
+  // ── Cards por empresa ──
+  function row(label, icon, real, orc, kind){
+    const m = metric(real, orc, kind);
+    let pill, fill;
+    if(kind==='res'){
+      // Resultado: % do previsto engana quando o orçado é negativo — mostramos a variação em R$
+      const delta = real - orc;
+      pill = (delta>=0?'▲ +':'▼ ')+fmtR(delta)+' vs previsto';
+      fill = real>=0 ? 100 : 18;
+    } else {
+      const pctStr = (m.pct*100).toFixed(1)+'%';
+      const arrow = kind==='exp' ? (real>orc+1?'▲':'▼') : (real>=orc-1?'▲':'▼');
+      pill = arrow+' '+pctStr;
+      fill = Math.min(Math.max(m.pct*100,3),100);
+    }
+    return '<div class="emp-row">'+
+      '<div class="emp-row-label"><span class="emp-row-icon">'+icon+'</span>'+label+'</div>'+
+      '<div class="emp-row-vals">'+
+        '<div class="emp-row-real" style="color:'+m.color+'">'+fmtR(real)+'</div>'+
+        '<div>orçado '+fmtR(orc)+'</div>'+
+      '</div>'+
+      '<div class="emp-row-bar"><i style="width:'+fill+'%;background:'+m.color+'"></i></div>'+
+      '<div style="grid-column:1/3;display:flex;justify-content:space-between;align-items:center;margin-top:4px">'+
+        '<span style="font-size:10.5px;color:'+m.color+'">'+m.txt+'</span>'+
+        '<span class="emp-pct" style="color:'+m.color+';background:'+m.color+'22">'+pill+'</span>'+
+      '</div>'+
+    '</div>';
+  }
+  function verdict(k){
+    const e=emp[k];
+    const rEp=e.recReal/e.recOrc, dEp=e.despReal/e.despOrc;
+    if(k==='icbio'){
+      return {i:'⚠️', t:'Faturou <b>'+((1-rEp)*100).toFixed(1)+'% abaixo</b> da meta e gastou <b>'+((dEp-1)*100).toFixed(1)+'% acima</b> do orçado — resultado a apenas '+pct(e.resReal/e.resOrc)+' do previsto. Principal ponto de atenção.'};
+    }
+    if(k==='acai'){
+      return {i:'🎉', t:'Faturou <b>'+((rEp-1)*100).toFixed(1)+'% acima</b> da meta com despesas dentro do orçado — transformou um prejuízo previsto ('+fmtR(e.resOrc)+') em lucro real de <b>'+fmtR(e.resReal)+'</b>.'};
+    }
+    if(k==='fazenda'){
+      return {i:'ℹ️', t:'Orçado Jan–Mai = realizado (metodologia da planilha), por isso 100% no período. O desafio está na <b>projeção anual</b>: precisa acelerar para atingir '+fmtR(e.recOrcFY)+'.'};
+    }
+    return {i:'📊', t:'No agregado o realizado iguala a média orçada. A variação real aparece <b>mês a mês</b> — veja o pico de despesas em Março no gráfico abaixo.'};
+  }
+  let cardsHtml='';
+  ['icbio','acai','fazenda','grupo'].forEach(k=>{
+    const e=emp[k], meta=EMP_META[k];
+    const v=verdict(k);
+    cardsHtml+='<div class="emp-card" style="--ac:'+meta.cor+'">'+
+      '<div class="emp-head"><div><div class="emp-name">'+meta.nome+'</div>'+
+        '<div class="emp-sub">'+meta.nota+'</div></div></div>'+
+      '<div class="emp-rows">'+
+        row('Faturamento', '💰', e.recReal, e.recOrc, 'rev')+
+        row('Despesas Totais', '💸', e.despReal, e.despOrc, 'exp')+
+        row('Resultado (Sobra)', '📈', e.resReal, e.resOrc, 'res')+
+      '</div>'+
+      '<div class="emp-verdict"><span class="vi">'+v.i+'</span><span>'+v.t+'</span></div>'+
+    '</div>';
+  });
+  document.getElementById('emp-oxr').innerHTML=cardsHtml;
+
+  // ── Grupo: receita mensal ──
   mkChart('ch-oxr-grupo',{type:'bar',
     data:{labels:ox.meses, datasets:[
-      {label:'Orcado',  data:ox.grupo.recOrc,
-        backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
+      {label:'Orçado (meta)', data:ox.grupo.recOrc, backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
       {label:'Realizado', data:ox.grupo.recReal,
         backgroundColor:ox.grupo.recReal.map((v,i)=>v>=ox.grupo.recOrc[i]?C.greenA:C.redA),
-        borderColor:ox.grupo.recReal.map((v,i)=>v>=ox.grupo.recOrc[i]?C.green:C.red),
-        borderWidth:1.5, borderRadius:3},
+        borderColor:ox.grupo.recReal.map((v,i)=>v>=ox.grupo.recOrc[i]?C.green:C.red), borderWidth:1.5, borderRadius:3},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg},scales:scalesXY()}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg,
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.parsed.y)}}},scales:scalesXY()}
   });
 
-  // ICBIO receita vs meta mensal
+  // ── ICBIO: receita vs meta mensal ──
   mkChart('ch-oxr-icbio',{type:'bar',
     data:{labels:ox.meses, datasets:[
-      {label:'Meta Mensal', data:ox.icbio.recOrc,
-        backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
+      {label:'Meta (R$ 1,7M)', data:ox.icbio.recOrc, backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
       {label:'Realizado', data:ox.icbio.recReal,
         backgroundColor:ox.icbio.recReal.map((v,i)=>v>=ox.icbio.recOrc[i]?C.greenA:C.redA),
-        borderColor:ox.icbio.recReal.map((v,i)=>v>=ox.icbio.recOrc[i]?C.green:C.red),
-        borderWidth:1.5, borderRadius:3},
+        borderColor:ox.icbio.recReal.map((v,i)=>v>=ox.icbio.recOrc[i]?C.green:C.red), borderWidth:1.5, borderRadius:3},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg},scales:scalesXY()}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg,
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.parsed.y)}}},scales:scalesXY()}
   });
 
-  // % atingido ICBIO por mes
-  const icbExecPcts = ox.icbio.recReal.map((v,i)=>+(v/ox.icbio.recOrc[i]*100).toFixed(1));
-  const icbColors   = icbExecPcts.map(v=>v>=102?'#4ade80':v>=100?C.green:v>=85?C.yellow:C.red);
+  // ── ICBIO: % atingido por mês ──
+  const icbPct = ox.icbio.recReal.map((v,i)=>+(v/ox.icbio.recOrc[i]*100).toFixed(1));
+  const icbCol = icbPct.map(v=>v>=102?'#4ade80':v>=100?C.green:v>=85?C.yellow:C.red);
   mkChart('ch-oxr-exec',{type:'bar',
     data:{labels:ox.meses, datasets:[
-      {label:'% Atingido',data:icbExecPcts,
-        backgroundColor:icbColors.map(c=>c+'44'), borderColor:icbColors, borderWidth:1.5, borderRadius:4},
-      {label:'Meta (100%)',data:ox.meses.map(()=>100),
-        type:'line',borderColor:'#555',borderWidth:1.5,borderDash:[4,3],
-        pointRadius:0,backgroundColor:'transparent'},
+      {label:'% da meta atingido', data:icbPct, backgroundColor:icbCol.map(c=>c+'55'), borderColor:icbCol, borderWidth:1.5, borderRadius:4},
+      {label:'Meta (100%)', data:ox.meses.map(()=>100), type:'line', borderColor:'#888', borderWidth:1.5, borderDash:[5,4], pointRadius:0, backgroundColor:'transparent'},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg},
-      scales:{x:{grid:gridCfg,ticks:tickCfg},
-        y:{grid:gridCfg,ticks:{...tickCfg,callback:v=>v+'%'},min:50,max:120}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg,
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
+      scales:{x:{grid:gridCfg,ticks:tickCfg}, y:{grid:gridCfg,ticks:{...tickCfg,callback:v=>v+'%'},min:50,max:115}}}
   });
 
-  // Resultado mensal grupo
+  // ── Grupo: resultado mensal ──
   mkChart('ch-oxr-bar',{type:'bar',
     data:{labels:ox.meses, datasets:[
-      {label:'Orcado', data:ox.grupo.resOrc,
-        backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
+      {label:'Previsto', data:ox.grupo.resOrc, backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
       {label:'Realizado', data:ox.grupo.resReal,
         backgroundColor:ox.grupo.resReal.map(v=>v>=0?C.greenA:C.redA),
-        borderColor:ox.grupo.resReal.map(v=>v>=0?C.green:C.red),
-        borderWidth:1.5, borderRadius:3},
+        borderColor:ox.grupo.resReal.map(v=>v>=0?C.green:C.red), borderWidth:1.5, borderRadius:3},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg},scales:scalesXY()}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg,
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.parsed.y)}}},scales:scalesXY()}
   });
 
-  // Tabela por empresa
-  const empresas = [
-    {nome:'ICBIO',             orcYTD:icbRecOrc,  realYTD:icbRecReal,  orcFY:ox.icbio.recOrcFY},
-    {nome:'Fazenda Agro',      orcYTD:fazRecOrc,  realYTD:fazRecReal,  orcFY:ox.fazenda.recOrcFY},
-    {nome:'Acai Tia Maria',    orcYTD:acaiRecOrc, realYTD:acaiRecReal, orcFY:ox.acai.recOrcFY},
-    {nome:'Grupo Consolidado', orcYTD:grpRecOrc,  realYTD:grpRecReal,  orcFY:ox.grupo.recOrcFY},
+  // ── Tabela: projeção anual de faturamento por empresa ──
+  function sevRec(ep){return ep>=1.02?'superado':ep>=0.999?'ok':ep>=0.85?'atencao':'critico';}
+  function sevColor(s){return s==='superado'?'#4ade80':s==='ok'?C.green:s==='atencao'?C.yellow:C.red;}
+  function sevTag(s){return s==='critico'?'badge-red':s==='atencao'?'badge-yellow':'badge-green';}
+  function sevTxt(s){return s==='superado'?'Superado':s==='ok'?'Na meta':s==='atencao'?'Atenção':'Crítico';}
+  const lista=[
+    {k:'icbio',nome:'ICBIO'},{k:'acai',nome:'Açaí Tia Maria'},
+    {k:'fazenda',nome:'Fazenda Agro'},{k:'grupo',nome:'Grupo Consolidado'},
   ];
-  let html='<thead><tr><th>Empresa</th><th>Orcado Jan-Mai</th><th>Realizado Jan-Mai</th>'+
-    '<th>Variacao R$</th><th>% Atingido</th><th>Projecao FY</th><th>Gap vs Meta FY</th><th>Status</th>'+
-    '</tr></thead><tbody>';
-  empresas.forEach(e=>{
-    const ep = e.realYTD / e.orcYTD;
-    const sev = sevRec(ep);
-    const varV = e.realYTD - e.orcYTD;
-    const projFY = e.realYTD * (12/5);
-    const gapFY = projFY - e.orcFY;
-    const clr = sevColor(sev);
-    const fillW = Math.min(ep*100, 120);
+  let html='<thead><tr><th>Empresa</th><th>Meta Jan–Mai</th><th>Realizado Jan–Mai</th>'+
+    '<th>% da Meta</th><th>Projeção Anual</th><th>Meta Anual</th><th>Gap Anual</th><th>Situação</th></tr></thead><tbody>';
+  lista.forEach(L=>{
+    const e=emp[L.k];
+    const ep=e.recReal/e.recOrc, s=sevRec(ep), clr=sevColor(s);
+    const projFY=e.recReal*(12/5), gap=projFY-e.recOrcFY;
     html+='<tr>'+
-      '<td style="font-weight:700">'+e.nome+'</td>'+
-      '<td>'+fmtR(e.orcYTD)+'</td>'+
-      '<td style="font-weight:700;color:'+clr+'">'+fmtR(e.realYTD)+'</td>'+
-      '<td style="color:'+(varV>=0?C.green:C.red)+';font-weight:600">'+(varV>=0?'+':'')+fmtR(varV)+'</td>'+
-      '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:42px">'+
-        (ep*100).toFixed(1)+'%</span>'+
-        '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+fillW+'%"></div></div></div></td>'+
+      '<td style="font-weight:700">'+L.nome+'</td>'+
+      '<td>'+fmtR(e.recOrc)+'</td>'+
+      '<td style="font-weight:700;color:'+clr+'">'+fmtR(e.recReal)+'</td>'+
+      '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:44px">'+(ep*100).toFixed(1)+'%</span>'+
+        '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+Math.min(ep*100,100)+'%"></div></div></div></td>'+
       '<td>'+fmtR(projFY)+'</td>'+
-      '<td style="color:'+(gapFY>=0?'#4ade80':C.red)+';font-weight:600">'+(gapFY>=0?'+':'')+fmtR(gapFY)+'</td>'+
-      '<td><span class="status-tag '+sevTag(sev)+'">'+sevTxt(sev)+'</span></td>'+
-      '</tr>';
+      '<td style="color:#8891a6">'+fmtR(e.recOrcFY)+'</td>'+
+      '<td style="color:'+(gap>=0?'#4ade80':C.red)+';font-weight:600">'+(gap>=0?'+':'')+fmtR(gap)+'</td>'+
+      '<td><span class="status-tag '+sevTag(s)+'">'+sevTxt(s)+'</span></td>'+
+    '</tr>';
   });
   html+='</tbody>';
   document.getElementById('tbl-oxr').innerHTML=html;
 
-  // ICBIO detalhe mensal
-  let html2='<thead><tr><th>Mes</th><th>Meta (Orcado)</th><th>Realizado</th>'+
-    '<th>Variacao R$</th><th>% Atingido</th><th>Status</th></tr></thead><tbody>';
+  // ── Tabela ICBIO mensal ──
+  let h2='<thead><tr><th>Mês</th><th>Meta (R$ 1,7M)</th><th>Realizado</th><th>Diferença</th><th>% da Meta</th><th>Situação</th></tr></thead><tbody>';
   ox.meses.forEach((m,i)=>{
     const orc=ox.icbio.recOrc[i], real=ox.icbio.recReal[i];
-    const ep=real/orc, sev=sevRec(ep), clr=sevColor(sev), varV=real-orc;
-    html2+='<tr>'+
-      '<td style="font-weight:700">'+m+' 2026</td>'+
-      '<td>'+fmtR(orc)+'</td>'+
+    const ep=real/orc, s=sevRec(ep), clr=sevColor(s), dif=real-orc;
+    h2+='<tr><td style="font-weight:700">'+m+' 2026</td><td>'+fmtR(orc)+'</td>'+
       '<td style="font-weight:700;color:'+clr+'">'+fmtR(real)+'</td>'+
-      '<td style="color:'+(varV>=0?C.green:C.red)+';font-weight:600">'+(varV>=0?'+':'')+fmtR(varV)+'</td>'+
-      '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:42px">'+
-        (ep*100).toFixed(1)+'%</span>'+
+      '<td style="color:'+(dif>=0?C.green:C.red)+';font-weight:600">'+(dif>=0?'+':'')+fmtR(dif)+'</td>'+
+      '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:44px">'+(ep*100).toFixed(1)+'%</span>'+
         '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+Math.min(ep*100,100)+'%"></div></div></div></td>'+
-      '<td><span class="status-tag '+sevTag(sev)+'">'+sevTxt(sev)+'</span></td></tr>';
+      '<td><span class="status-tag '+sevTag(s)+'">'+sevTxt(s)+'</span></td></tr>';
   });
-  const totEp=icbRecReal/icbRecOrc, totSev=sevRec(totEp), totClr=sevColor(totSev);
-  html2+='<tr style="font-weight:700;background:#181b26">'+
-    '<td>YTD Jan-Mai</td><td style="color:#8891a6">'+fmtR(icbRecOrc)+'</td>'+
-    '<td style="color:'+totClr+'">'+fmtR(icbRecReal)+'</td>'+
-    '<td style="color:'+(icbRecReal-icbRecOrc>=0?C.green:C.red)+'">'+fmtR(icbRecReal-icbRecOrc)+'</td>'+
-    '<td><div class="prog-cell"><span style="color:'+totClr+';font-weight:700;min-width:42px">'+
-      (totEp*100).toFixed(1)+'%</span>'+
-      '<div class="prog-track"><div class="prog-fill" style="background:'+totClr+';width:'+Math.min(totEp*100,100)+'%"></div></div></div></td>'+
-    '<td><span class="status-tag '+sevTag(totSev)+'">'+sevTxt(totSev)+'</span></td></tr></tbody>';
-  document.getElementById('tbl-oxr-icbio').innerHTML=html2;
+  const tot=emp.icbio, tEp=tot.recReal/tot.recOrc, tS=sevRec(tEp), tClr=sevColor(tS);
+  h2+='<tr style="font-weight:700;background:#181b26"><td>YTD Jan–Mai</td><td style="color:#8891a6">'+fmtR(tot.recOrc)+'</td>'+
+    '<td style="color:'+tClr+'">'+fmtR(tot.recReal)+'</td>'+
+    '<td style="color:'+(tot.recReal-tot.recOrc>=0?C.green:C.red)+'">'+fmtR(tot.recReal-tot.recOrc)+'</td>'+
+    '<td><div class="prog-cell"><span style="color:'+tClr+';font-weight:700;min-width:44px">'+(tEp*100).toFixed(1)+'%</span>'+
+      '<div class="prog-track"><div class="prog-fill" style="background:'+tClr+';width:'+Math.min(tEp*100,100)+'%"></div></div></div></td>'+
+    '<td><span class="status-tag '+sevTag(tS)+'">'+sevTxt(tS)+'</span></td></tr></tbody>';
+  document.getElementById('tbl-oxr-icbio').innerHTML=h2;
 }
 
 
@@ -1079,12 +1174,11 @@ function renderPlano() {
 
 // ─── RENDER ALL ───────────────────────────────────────────────────────────────
 function renderAll() {
+  renderOxR();
   renderConsolidado();
-  renderPlano();
   renderCompany('icbio',  'kpi-icbio',  'ebitda-icbio',  'ch-icbio-rv','ch-icbio-ebitda','ch-icbio-custos','ch-icbio-breakdown','tbl-icbio-breakdown');
   renderCompany('fazenda','kpi-fazenda','ebitda-fazenda', 'ch-faz-rv',  'ch-faz-ebitda',  'ch-faz-custos',  'ch-faz-breakdown',  'tbl-faz-breakdown');
   renderCompany('acai',   'kpi-acai',  'ebitda-acai',   'ch-acai-rv', 'ch-acai-ebitda', 'ch-acai-custos', 'ch-acai-breakdown', 'tbl-acai-breakdown');
-  renderOxR();
 }
 
 // ─── EXCEL PARSING ────────────────────────────────────────────────────────────
@@ -1153,8 +1247,8 @@ document.getElementById('file-input').addEventListener('change', async function(
       if(raw){ DATA[company]=buildCompany({...raw,name:DATA[company].name});
         document.getElementById('slot-'+company).classList.add('loaded'); updated=true; }
     }
-    const oxrP=parseOxRSheet(wb.Sheets['COMPARATIVO_OxR']);
-    if(oxrP){OXR=oxrP;updated=true;}
+    // OxR usa as abas ORÇAMENTO 2026 (baseline validado). O upload de DRE
+    // atualiza as abas por empresa; a comparação Orçado×Realizado é mantida.
   }
   if(updated){
     document.getElementById('last-update').textContent='Atualizado em: '+new Date().toLocaleString('pt-BR');
