@@ -280,6 +280,19 @@ canvas{max-width:100%}
   <div class="kpi-grid" id="kpi-oxr"></div>
   <div class="section-title">Detalhamento por Empresa — Faturamento, Despesas e Resultado</div>
   <div class="emp-grid" id="emp-oxr"></div>
+  <div class="section-title" id="contas-title">Orçado × Realizado por Tipo de Conta</div>
+  <div style="font-size:11.5px;color:#8891a6;margin:-4px 0 8px;line-height:1.5">
+    Comparativo conta a conta da <strong style="color:#f97316">ICBIO</strong> — única empresa com orçamento formal por categoria.
+    <span style="color:#22c55e">Verde</span> = dentro/abaixo do orçado (despesa) ou acima da meta (receita);
+    <span style="color:#ef4444">vermelho</span> = estourou o orçado.
+  </div>
+  <div class="charts-row charts-2">
+    <div class="chart-card"><div class="chart-title">Orçado vs Realizado por Conta</div><div class="chart-wrap tall"><canvas id="ch-oxr-contas"></canvas></div></div>
+    <div class="chart-card" style="overflow-x:auto"><div class="chart-title">Variação vs Orçado (R$)</div><div class="chart-wrap tall"><canvas id="ch-oxr-contas-var"></canvas></div></div>
+  </div>
+  <div class="chart-card" style="overflow-x:auto;margin-top:14px">
+    <table class="oxr-table" id="tbl-oxr-contas"></table>
+  </div>
   <div class="section-title">Receita Mensal — Orçado vs Realizado</div>
   <div class="charts-row charts-2">
     <div class="chart-card">
@@ -518,6 +531,23 @@ const EMP_META = {
   acai:    {nome:'Açaí Tia Maria',      cor:'#a855f7', nota:'Meta de faturamento = projeção otimista 2026'},
 };
 
+// ─── ORÇADO × REALIZADO POR TIPO DE CONTA (ICBIO — única empresa com orçamento
+//     formal por categoria). Período Jan–Mar 2026 (meses com orçamento detalhado).
+//     Fonte: aba ORÇAMENTO-2026. Orçado = meta mensal × 3 meses; FY = meta anual.
+let CONTAS = {
+  periodo: 'Jan–Mar 2026',
+  itens: [
+    {conta:'Receita Operacional Bruta',  orc:5100000, real:4384621, fy:20400000, tipo:'rev'},
+    {conta:'CMV (Insumos e Produção)',   orc: 780000, real: 771937, fy: 3120000, tipo:'exp'},
+    {conta:'Manutenção / Logística',     orc:1371692, real:1250785, fy: 5486766, tipo:'exp'},
+    {conta:'Despesas de RH (Pessoal)',   orc: 576016, real: 586054, fy: 2304063, tipo:'exp'},
+    {conta:'Investimentos',              orc: 875445, real: 951681, fy: 3209965, tipo:'exp'},
+    {conta:'Impostos (ICMS/PIS/Cofins)', orc: 158544, real: 208724, fy:  634176, tipo:'exp'},
+    {conta:'Despesas Financeiras',       orc: 127697, real: 124648, fy:  510788, tipo:'exp'},
+    {conta:'Despesas Administrativas',   orc:  76890, real:  98838, fy:  254646, tipo:'exp'},
+  ],
+};
+
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
 function showTab(name, btn) {
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
@@ -734,10 +764,75 @@ function renderConsolidado() {
   });
 }
 
+// ─── RENDER ORÇADO × REALIZADO POR TIPO DE CONTA (ICBIO) ──────────────────────
+function renderContas() {
+  const it = CONTAS.itens;
+  document.getElementById('contas-title').textContent =
+    'Orçado × Realizado por Tipo de Conta — ICBIO ('+CONTAS.periodo+')';
+
+  // bom/ruim por tipo: receita acima = bom; despesa abaixo = bom
+  function isGood(c){ return c.tipo==='rev' ? c.real>=c.orc : c.real<=c.orc*1.001; }
+  function corReal(c){
+    if(c.tipo==='rev') return c.real>=c.orc?C.green:(c.real>=c.orc*0.85?C.yellow:C.red);
+    const r=c.real/c.orc; return r<=1.001?C.green:(r<=1.05?C.yellow:C.red);
+  }
+  const labels = it.map(c=>c.conta.length>22?c.conta.slice(0,20)+'…':c.conta);
+
+  // Gráfico 1: orçado vs realizado (barras horizontais agrupadas)
+  mkChart('ch-oxr-contas',{type:'bar',
+    data:{labels, datasets:[
+      {label:'Orçado', data:it.map(c=>c.orc), backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1.5, borderRadius:3},
+      {label:'Realizado', data:it.map(c=>c.real),
+        backgroundColor:it.map(c=>corReal(c)+'55'), borderColor:it.map(c=>corReal(c)), borderWidth:1.5, borderRadius:3},
+    ]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:legendCfg,
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.parsed.x)}}},
+      scales:{x:{grid:gridCfg,ticks:{...tickCfg,callback:v=>fmtR(v)}},y:{grid:gridCfg,ticks:{color:C.text,font:{...baseFont,size:10}}}}}
+  });
+
+  // Gráfico 2: variação R$ (realizado − orçado), positivo/negativo conforme bom/ruim
+  const varRS = it.map(c=>c.real-c.orc);
+  mkChart('ch-oxr-contas-var',{type:'bar',
+    data:{labels, datasets:[{label:'Variação vs orçado', data:varRS,
+      backgroundColor:it.map(c=>(isGood(c)?C.green:C.red)+'55'),
+      borderColor:it.map(c=>isGood(c)?C.green:C.red), borderWidth:1.5, borderRadius:3}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>{const x=c.parsed.x; return (x>=0?'+':'')+fmtR(x)+(isGood(it[c.dataIndex])?' (favorável)':' (desfavorável)');}}}},
+      scales:{x:{grid:gridCfg,ticks:{...tickCfg,callback:v=>fmtR(v)}},y:{grid:gridCfg,ticks:{color:C.text,font:{...baseFont,size:10}}}}}
+  });
+
+  // Tabela detalhada
+  let h='<thead><tr><th>Tipo de Conta</th><th>Orçado ('+CONTAS.periodo+')</th><th>Realizado</th>'+
+    '<th>Variação R$</th><th>% do Orçado</th><th>Meta Anual</th><th>Situação</th></tr></thead><tbody>';
+  it.forEach(c=>{
+    const ep=c.real/c.orc, varV=c.real-c.orc, good=isGood(c), clr=corReal(c);
+    let stTxt, stCls;
+    if(c.tipo==='rev'){
+      stTxt = ep>=1?'Acima da meta':ep>=0.85?'Abaixo da meta':'Muito abaixo';
+      stCls = ep>=1?'badge-green':ep>=0.85?'badge-yellow':'badge-red';
+    } else {
+      stTxt = ep<=1.001?'Dentro do orçado':ep<=1.05?'Pouco acima':'Acima do orçado';
+      stCls = ep<=1.001?'badge-green':ep<=1.05?'badge-yellow':'badge-red';
+    }
+    h+='<tr>'+
+      '<td style="font-weight:600">'+c.conta+'</td>'+
+      '<td>'+fmtR(c.orc)+'</td>'+
+      '<td style="font-weight:700;color:'+clr+'">'+fmtR(c.real)+'</td>'+
+      '<td style="color:'+(good?C.green:C.red)+';font-weight:600">'+(varV>=0?'+':'')+fmtR(varV)+'</td>'+
+      '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:44px">'+(ep*100).toFixed(1)+'%</span>'+
+        '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+Math.min(ep*100,100)+'%"></div></div></div></td>'+
+      '<td style="color:#8891a6">'+fmtR(c.fy)+'</td>'+
+      '<td><span class="status-tag '+stCls+'">'+stTxt+'</span></td>'+
+    '</tr>';
+  });
+  document.getElementById('tbl-oxr-contas').innerHTML=h;
+}
+
 // ─── RENDER OxR ───────────────────────────────────────────────────────────────
 function renderOxR() {
   const ox = OXR;
   const S = a => a.reduce((s,v)=>s+v,0);
+  renderContas();
 
   // métrica: compara realizado vs orçado conforme o tipo de conta
   // kind: 'rev' (faturamento — mais é bom) | 'exp' (despesa — menos é bom) | 'res' (resultado)
