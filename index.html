@@ -6,57 +6,57 @@
 <title>Painel BI – Grupo Total Energia 2026</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',sans-serif;background:#1a1d27;color:#e0e4f0;min-height:100vh}
-.header{background:#12151f;border-bottom:1px solid #2a2d3e;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.header h1{font-size:17px;font-weight:700;color:#fff}
-.header h1 span{color:#4f8ef7;font-size:13px;font-weight:400;margin-left:8px}
-.upload-bar{background:#0f1219;border-bottom:1px solid #2a2d3e;padding:10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.upload-btn{background:#4f8ef7;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s}
-.upload-btn:hover{background:#3a75e0}
+body{font-family:'Segoe UI',sans-serif;background:#eef4ef;color:#1f2e26;min-height:100vh}
+.header{background:#ffffff;border-bottom:1px solid #dce7df;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;box-shadow:0 1px 3px rgba(20,40,30,.04)}
+.header h1{font-size:17px;font-weight:700;color:#14241c}
+.header h1 span{color:#16a34a;font-size:13px;font-weight:500;margin-left:8px}
+.upload-bar{background:#f7faf8;border-bottom:1px solid #dce7df;padding:10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.upload-btn{background:#16a34a;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;box-shadow:0 1px 2px rgba(22,163,74,.25)}
+.upload-btn:hover{background:#15803d}
 .file-slots{display:flex;gap:8px;flex-wrap:wrap}
-.slot{display:flex;align-items:center;gap:6px;background:#1e2130;border:1px solid #2a2d3e;border-radius:6px;padding:5px 10px;font-size:11px;color:#8891a6;transition:all .2s}
-.slot.loaded{border-color:#22c55e;color:#22c55e;background:#0d2318}
-.slot-dot{width:6px;height:6px;border-radius:50%;background:#3a3d50;flex-shrink:0}
-.slot.loaded .slot-dot{background:#22c55e}
+.slot{display:flex;align-items:center;gap:6px;background:#ffffff;border:1px solid #dce7df;border-radius:6px;padding:5px 10px;font-size:11px;color:#6f8278;transition:all .2s}
+.slot.loaded{border-color:#16a34a;color:#15803d;background:#e8f5ec}
+.slot-dot{width:6px;height:6px;border-radius:50%;background:#c2d2c8;flex-shrink:0}
+.slot.loaded .slot-dot{background:#16a34a}
 #file-input{display:none}
-.tab-nav{background:#12151f;border-bottom:1px solid #2a2d3e;display:flex;overflow-x:auto}
-.tab-btn{padding:12px 20px;border:none;background:none;color:#8891a6;font-size:13px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
-.tab-btn:hover{color:#c0c8e0}
-.tab-btn.active{color:#4f8ef7;border-bottom-color:#4f8ef7}
+.tab-nav{background:#ffffff;border-bottom:1px solid #dce7df;display:flex;overflow-x:auto}
+.tab-btn{padding:12px 20px;border:none;background:none;color:#6f8278;font-size:13px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:#14241c}
+.tab-btn.active{color:#16a34a;border-bottom-color:#16a34a}
 .tab-content{display:none;padding:20px 24px}
 .tab-content.active{display:block}
-.section-title{font-size:12px;font-weight:600;color:#8891a6;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:20px}
+.section-title{font-size:12px;font-weight:600;color:#6f8278;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:20px}
 .section-title:first-child{margin-top:0}
 /* KPI */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}
-.kpi-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:10px;padding:16px;position:relative;overflow:hidden}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4f8ef7)}
-.kpi-label{font-size:11px;color:#8891a6;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.kpi-value{font-size:22px;font-weight:700;color:#fff;line-height:1.1}
-.kpi-sub{font-size:11px;color:#8891a6;margin-top:4px}
+.kpi-card{background:#ffffff;border:1px solid #dce7df;border-radius:10px;padding:16px;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#16a34a)}
+.kpi-label{font-size:11px;color:#6f8278;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.kpi-value{font-size:22px;font-weight:700;color:#14241c;line-height:1.1}
+.kpi-sub{font-size:11px;color:#6f8278;margin-top:4px}
 .kpi-badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;margin-top:5px}
-.badge-green{background:#0d2318;color:#22c55e}
-.badge-red{background:#2a0d0d;color:#ef4444}
-.badge-yellow{background:#2a2100;color:#f59e0b}
+.badge-green{background:#e8f5ec;color:#15803d}
+.badge-red{background:#fdecec;color:#dc2626}
+.badge-yellow{background:#fbf0dc;color:#b45309}
 /* EBITDA STRIP */
-.ebitda-strip{background:#1e2130;border:1px solid #2a2d3e;border-radius:10px;padding:14px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:4px}
-.es-label{font-size:11px;color:#8891a6;text-transform:uppercase;letter-spacing:.5px}
-.es-val{font-size:18px;font-weight:700;color:#4f8ef7}
-.es-sep{width:1px;height:32px;background:#2a2d3e;flex-shrink:0}
+.ebitda-strip{background:#ffffff;border:1px solid #dce7df;border-radius:10px;padding:14px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:4px;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.es-label{font-size:11px;color:#6f8278;text-transform:uppercase;letter-spacing:.5px}
+.es-val{font-size:18px;font-weight:700;color:#16a34a}
+.es-sep{width:1px;height:32px;background:#e3ebe5;flex-shrink:0}
 .es-item{display:flex;flex-direction:column;gap:2px}
 .ating-bar{flex:1;min-width:160px}
-.ating-track{height:8px;background:#2a2d3e;border-radius:4px;overflow:hidden;margin-top:6px}
-.ating-fill{height:100%;border-radius:4px;background:#4f8ef7}
-.ating-fill.warn{background:#f59e0b}
-.ating-fill.danger{background:#ef4444}
+.ating-track{height:8px;background:#e8efe9;border-radius:4px;overflow:hidden;margin-top:6px}
+.ating-fill{height:100%;border-radius:4px;background:#16a34a}
+.ating-fill.warn{background:#d97706}
+.ating-fill.danger{background:#dc2626}
 /* CHARTS */
 .charts-row{display:grid;gap:16px;margin-top:4px}
 .charts-2{grid-template-columns:1fr 1fr}
 .charts-3{grid-template-columns:2fr 1fr 1fr}
 .charts-full{grid-template-columns:1fr}
 @media(max-width:900px){.charts-2,.charts-3{grid-template-columns:1fr}}
-.chart-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:10px;padding:16px}
-.chart-title{font-size:12px;font-weight:600;color:#8891a6;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.chart-card{background:#ffffff;border:1px solid #dce7df;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.chart-title{font-size:12px;font-weight:600;color:#6f8278;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
 .chart-wrap{position:relative;height:220px}
 .chart-wrap.tall{height:300px}
 .chart-wrap.short{height:160px}
@@ -64,109 +64,109 @@ body{font-family:'Segoe UI',sans-serif;background:#1a1d27;color:#e0e4f0;min-heig
 /* OxR ALERTS */
 .alert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:4px}
 .alert-card{border-radius:10px;padding:14px 16px;border:1px solid;position:relative;overflow:hidden}
-.alert-card.critico{background:#1a0808;border-color:#7f1d1d}
-.alert-card.atencao{background:#1a1208;border-color:#78350f}
-.alert-card.ok{background:#081a0e;border-color:#14532d}
-.alert-card.superado{background:#051a10;border-color:#16a34a;box-shadow:0 0 12px rgba(34,197,94,.18)}
+.alert-card.critico{background:#fdecec;border-color:#f3c4c4}
+.alert-card.atencao{background:#fbf3e3;border-color:#f0d9a8}
+.alert-card.ok{background:#e8f5ec;border-color:#b7e0c4}
+.alert-card.superado{background:#e3f7ea;border-color:#7fce9c;box-shadow:0 0 10px rgba(22,163,74,.12)}
 .alert-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px}
-.alert-card.critico::before{background:#ef4444}
-.alert-card.atencao::before{background:#f59e0b}
-.alert-card.ok::before{background:#22c55e}
-.alert-card.superado::before{background:#22c55e;box-shadow:0 0 6px #22c55e}
+.alert-card.critico::before{background:#dc2626}
+.alert-card.atencao::before{background:#d97706}
+.alert-card.ok::before{background:#16a34a}
+.alert-card.superado::before{background:#16a34a}
 .alert-cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.alert-card.critico .alert-cat{color:#ef4444}
-.alert-card.atencao .alert-cat{color:#f59e0b}
-.alert-card.ok .alert-cat{color:#22c55e}
-.alert-card.superado .alert-cat{color:#4ade80;font-size:12px}
+.alert-card.critico .alert-cat{color:#dc2626}
+.alert-card.atencao .alert-cat{color:#b45309}
+.alert-card.ok .alert-cat{color:#15803d}
+.alert-card.superado .alert-cat{color:#15803d;font-size:12px}
 .alert-nums{display:flex;gap:10px;font-size:12px;flex-wrap:wrap}
-.alert-orc{color:#8891a6}
+.alert-orc{color:#6f8278}
 .alert-real{font-weight:700}
-.alert-card.critico .alert-real{color:#ef4444}
-.alert-card.atencao .alert-real{color:#f59e0b}
-.alert-card.ok .alert-real{color:#22c55e}
-.alert-card.superado .alert-real{color:#4ade80}
+.alert-card.critico .alert-real{color:#dc2626}
+.alert-card.atencao .alert-real{color:#b45309}
+.alert-card.ok .alert-real{color:#15803d}
+.alert-card.superado .alert-real{color:#15803d}
 .alert-pct{font-size:14px;font-weight:800;position:absolute;top:12px;right:14px}
-.alert-card.critico .alert-pct{color:#ef4444}
-.alert-card.atencao .alert-pct{color:#f59e0b}
-.alert-card.ok .alert-pct{color:#22c55e}
-.alert-card.superado .alert-pct{color:#4ade80;font-size:16px}
-.alert-bar{height:4px;border-radius:2px;background:#2a2d3e;margin-top:8px;overflow:hidden}
+.alert-card.critico .alert-pct{color:#dc2626}
+.alert-card.atencao .alert-pct{color:#b45309}
+.alert-card.ok .alert-pct{color:#15803d}
+.alert-card.superado .alert-pct{color:#15803d;font-size:16px}
+.alert-bar{height:4px;border-radius:2px;background:#e8efe9;margin-top:8px;overflow:hidden}
 .alert-bar-fill{height:100%;border-radius:2px}
 /* BREAKDOWN TABLE */
 .breakdown-table{width:100%;border-collapse:collapse;font-size:12px}
-.breakdown-table th{background:#12151f;color:#8891a6;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;text-align:right;border-bottom:1px solid #2a2d3e;white-space:nowrap}
+.breakdown-table th{background:#f3f7f4;color:#6f8278;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;text-align:right;border-bottom:1px solid #dce7df;white-space:nowrap}
 .breakdown-table th:first-child,.breakdown-table th:nth-child(2){text-align:left}
-.breakdown-table td{padding:8px 10px;text-align:right;border-bottom:1px solid #1a1d27;vertical-align:middle}
-.breakdown-table td:first-child{text-align:left}
-.breakdown-table td:nth-child(2){text-align:left;color:#8891a6;font-size:11px}
-.breakdown-table tr:hover td{background:#232638}
+.breakdown-table td{padding:8px 10px;text-align:right;border-bottom:1px solid #eef3ef;vertical-align:middle}
+.breakdown-table td:first-child{text-align:left;color:#1f2e26}
+.breakdown-table td:nth-child(2){text-align:left;color:#6f8278;font-size:11px}
+.breakdown-table tr:hover td{background:#f3f8f4}
 .rank-bar{display:flex;align-items:center;gap:6px}
 .rank-fill{height:6px;border-radius:3px;min-width:2px;flex-shrink:0}
 /* OxR TABLE */
 .oxr-table{width:100%;border-collapse:collapse;font-size:12px}
-.oxr-table th{background:#12151f;color:#8891a6;font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.4px;padding:9px 10px;text-align:right;border-bottom:1px solid #2a2d3e}
+.oxr-table th{background:#f3f7f4;color:#6f8278;font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.4px;padding:9px 10px;text-align:right;border-bottom:1px solid #dce7df}
 .oxr-table th:first-child{text-align:left}
-.oxr-table td{padding:9px 10px;text-align:right;border-bottom:1px solid #1a1d27}
-.oxr-table td:first-child{text-align:left;font-weight:500;color:#c0c8e0}
-.oxr-table tr:hover td{background:#232638}
+.oxr-table td{padding:9px 10px;text-align:right;border-bottom:1px solid #eef3ef;color:#1f2e26}
+.oxr-table td:first-child{text-align:left;font-weight:500;color:#33433a}
+.oxr-table tr:hover td{background:#f3f8f4}
 .prog-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
-.prog-track{width:60px;height:6px;background:#2a2d3e;border-radius:3px;overflow:hidden;flex-shrink:0}
+.prog-track{width:60px;height:6px;background:#e8efe9;border-radius:3px;overflow:hidden;flex-shrink:0}
 .prog-fill{height:100%;border-radius:3px}
 .status-tag{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
 canvas{max-width:100%}
 /* OxR — banner explicativo */
-.oxr-help{background:linear-gradient(90deg,#161a28,#1a1f30);border:1px solid #2a2d3e;border-left:4px solid #4f8ef7;border-radius:10px;padding:14px 18px;margin-bottom:6px}
-.oxr-help-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px}
+.oxr-help{background:linear-gradient(90deg,#eef9f1,#e6f5ec);border:1px solid #cfe6d8;border-left:4px solid #16a34a;border-radius:10px;padding:14px 18px;margin-bottom:6px}
+.oxr-help-title{font-size:13px;font-weight:700;color:#14241c;margin-bottom:8px}
 .oxr-help-rules{display:flex;gap:22px;flex-wrap:wrap}
-.oxr-rule{display:flex;align-items:center;gap:9px;font-size:12px;color:#c0c8e0;line-height:1.4}
+.oxr-rule{display:flex;align-items:center;gap:9px;font-size:12px;color:#33433a;line-height:1.4}
 .oxr-rule .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
-.oxr-rule strong{color:#fff}
+.oxr-rule strong{color:#14241c}
 /* OxR — cards por empresa */
 .emp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
-.emp-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:12px;overflow:hidden;position:relative}
-.emp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--ac,#4f8ef7)}
-.emp-head{padding:14px 16px 11px;border-bottom:1px solid #2a2d3e;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.emp-name{font-size:15px;font-weight:800;color:#fff}
-.emp-sub{font-size:10.5px;color:#8891a6;margin-top:2px}
+.emp-card{background:#ffffff;border:1px solid #dce7df;border-radius:12px;overflow:hidden;position:relative;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.emp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--ac,#16a34a)}
+.emp-head{padding:14px 16px 11px;border-bottom:1px solid #eef3ef;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.emp-name{font-size:15px;font-weight:800;color:#14241c}
+.emp-sub{font-size:10.5px;color:#6f8278;margin-top:2px}
 .emp-rows{padding:6px 16px 12px}
-.emp-row{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:10px 0;border-bottom:1px solid #1a1d27}
+.emp-row{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:10px 0;border-bottom:1px solid #eef3ef}
 .emp-row:last-child{border-bottom:none}
-.emp-row-label{font-size:11.5px;font-weight:600;color:#c0c8e0;display:flex;align-items:center;gap:6px}
+.emp-row-label{font-size:11.5px;font-weight:600;color:#33433a;display:flex;align-items:center;gap:6px}
 .emp-row-icon{font-size:13px}
-.emp-row-vals{text-align:right;font-size:11px;color:#8891a6}
+.emp-row-vals{text-align:right;font-size:11px;color:#6f8278}
 .emp-row-real{font-size:17px;font-weight:800;line-height:1.1}
-.emp-row-bar{grid-column:1/3;height:6px;background:#2a2d3e;border-radius:3px;overflow:hidden;margin-top:5px}
+.emp-row-bar{grid-column:1/3;height:6px;background:#e8efe9;border-radius:3px;overflow:hidden;margin-top:5px}
 .emp-row-bar i{display:block;height:100%;border-radius:3px}
 .emp-pct{font-size:11px;font-weight:800;padding:2px 7px;border-radius:5px}
-.emp-verdict{padding:10px 16px;font-size:11.5px;line-height:1.45;background:#171a26;border-top:1px solid #2a2d3e;display:flex;gap:8px;align-items:flex-start}
+.emp-verdict{padding:10px 16px;font-size:11.5px;line-height:1.45;background:#f6faf7;border-top:1px solid #eef3ef;display:flex;gap:8px;align-items:flex-start;color:#33433a}
 .emp-verdict .vi{font-size:14px;flex-shrink:0}
 /* PLANO DE AÇÃO */
 .plano-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:4px}
-.plano-sum-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:10px;padding:14px;text-align:center;position:relative}
-.plano-sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--a,#4f8ef7);border-radius:10px 10px 0 0}
-.plano-sum-num{font-size:28px;font-weight:800;color:#fff}
-.plano-sum-label{font-size:11px;color:#8891a6;margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.plano-sum-card{background:#ffffff;border:1px solid #dce7df;border-radius:10px;padding:14px;text-align:center;position:relative;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.plano-sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--a,#16a34a);border-radius:10px 10px 0 0}
+.plano-sum-num{font-size:28px;font-weight:800;color:#14241c}
+.plano-sum-label{font-size:11px;color:#6f8278;margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
 .plano-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
-.plano-card{background:#1e2130;border:1px solid #2a2d3e;border-radius:12px;overflow:hidden}
-.plano-card-header{padding:14px 16px 10px;border-bottom:1px solid #2a2d3e;display:flex;align-items:flex-start;gap:10px}
+.plano-card{background:#ffffff;border:1px solid #dce7df;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(20,40,30,.05)}
+.plano-card-header{padding:14px 16px 10px;border-bottom:1px solid #eef3ef;display:flex;align-items:flex-start;gap:10px}
 .plano-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
 .plano-header-txt{flex:1}
-.plano-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
-.plano-diag{font-size:11px;color:#8891a6;line-height:1.45}
+.plano-title{font-size:13px;font-weight:700;color:#14241c;margin-bottom:3px}
+.plano-diag{font-size:11px;color:#6f8278;line-height:1.45}
 .plano-status-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
 .plano-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
-.plano-tag.red{background:#2a0d0d;color:#ef4444}
-.plano-tag.yellow{background:#2a2100;color:#f59e0b}
-.plano-tag.green{background:#0d2318;color:#22c55e}
-.plano-tag.blue{background:#0d1a2a;color:#4f8ef7}
-.plano-kpi-pill{font-size:10px;color:#8891a6;background:#12151f;border-radius:4px;padding:2px 7px}
+.plano-tag.red{background:#fdecec;color:#dc2626}
+.plano-tag.yellow{background:#fbf0dc;color:#b45309}
+.plano-tag.green{background:#e8f5ec;color:#15803d}
+.plano-tag.blue{background:#e4f1ef;color:#0d9488}
+.plano-kpi-pill{font-size:10px;color:#6f8278;background:#f3f7f4;border-radius:4px;padding:2px 7px}
 .plano-actions{padding:12px 16px}
 .plano-actions ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-.plano-actions li{display:flex;gap:8px;font-size:12px;line-height:1.4;color:#c0c8e0}
-.plano-actions li::before{content:'→';color:#4f8ef7;font-weight:700;flex-shrink:0;margin-top:1px}
+.plano-actions li{display:flex;gap:8px;font-size:12px;line-height:1.4;color:#33433a}
+.plano-actions li::before{content:'\2192';color:#16a34a;font-weight:700;flex-shrink:0;margin-top:1px}
 .plano-footer{padding:8px 16px 12px;display:flex;gap:8px;flex-wrap:wrap}
-.plano-footer-item{font-size:10px;color:#8891a6;background:#12151f;border-radius:4px;padding:3px 8px}
-.plano-footer-item strong{color:#c0c8e0}
+.plano-footer-item{font-size:10px;color:#6f8278;background:#f3f7f4;border-radius:4px;padding:3px 8px}
+.plano-footer-item strong{color:#33433a}
 </style>
 </head>
 <body>
@@ -281,7 +281,7 @@ canvas{max-width:100%}
   <div class="section-title">Detalhamento por Empresa — Faturamento, Despesas e Resultado</div>
   <div class="emp-grid" id="emp-oxr"></div>
   <div class="section-title" id="contas-title">Orçado × Realizado por Tipo de Conta</div>
-  <div style="font-size:11.5px;color:#8891a6;margin:-4px 0 8px;line-height:1.5">
+  <div style="font-size:11.5px;color:#6f8278;margin:-4px 0 8px;line-height:1.5">
     Comparativo conta a conta da <strong style="color:#f97316">ICBIO</strong> — única empresa com orçamento formal por categoria.
     <span style="color:#22c55e">Verde</span> = dentro/abaixo do orçado (despesa) ou acima da meta (receita);
     <span style="color:#ef4444">vermelho</span> = estourou o orçado.
@@ -358,10 +358,10 @@ function mkChart(id, cfg) {
 }
 
 // ─── THEME ────────────────────────────────────────────────────────────────────
-const C = { blue:'#4f8ef7', blueA:'rgba(79,142,247,0.18)', green:'#22c55e',
-  greenA:'rgba(34,197,94,0.18)', red:'#ef4444', redA:'rgba(239,68,68,0.2)',
-  orange:'#f97316', yellow:'#f59e0b', purple:'#a855f7', teal:'#14b8a6',
-  grid:'rgba(255,255,255,0.06)', text:'#8891a6' };
+const C = { blue:'#0d9488', blueA:'rgba(13,148,136,0.55)', green:'#16a34a',
+  greenA:'rgba(22,163,74,0.55)', red:'#dc2626', redA:'rgba(220,38,38,0.5)',
+  orange:'#ea7a17', yellow:'#d97706', purple:'#7c3aed', teal:'#0d9488',
+  grid:'rgba(20,40,30,0.08)', text:'#5b6b62' };
 const baseFont = {family:"'Segoe UI',sans-serif",size:11};
 const tickCfg  = {color:C.text,font:baseFont};
 const gridCfg  = {color:C.grid,drawBorder:false};
@@ -525,7 +525,7 @@ let OXR = {
   },
 };
 const EMP_META = {
-  grupo:   {nome:'Grupo Total Energia', cor:'#4f8ef7', nota:'Orçado = média mensal do período (referência)'},
+  grupo:   {nome:'Grupo Total Energia', cor:'#0d9488', nota:'Orçado = média mensal do período (referência)'},
   icbio:   {nome:'ICBIO',               cor:'#f97316', nota:'Meta fixa de R$ 1,7M/mês'},
   fazenda: {nome:'Fazenda Agro',        cor:'#22c55e', nota:'Orçado Jan–Mai = realizado (base da planilha)'},
   acai:    {nome:'Açaí Tia Maria',      cor:'#a855f7', nota:'Meta de faturamento = projeção otimista 2026'},
@@ -592,16 +592,16 @@ function renderStrip(id, d) {
     <div class="ating-bar">
       <div class="es-label">Margem EBITDA sobre Receita</div>
       <div class="ating-track"><div class="ating-fill ${fc}" style="width:${Math.min(Math.max(a*100,0),100)}%"></div></div>
-      <div style="font-size:10px;color:#8891a6;margin-top:3px">${pct(a)} da receita convertida em EBITDA</div>
+      <div style="font-size:10px;color:#6f8278;margin-top:3px">${pct(a)} da receita convertida em EBITDA</div>
     </div>
   </div>`;
 }
 
 // ─── RENDER COST BREAKDOWN ────────────────────────────────────────────────────
 const GROUP_COLORS = {
-  'CMV':'#ef4444','RH':'#4f8ef7','Manutenção/Logística':'#f97316',
+  'CMV':'#ef4444','RH':'#0d9488','Manutenção/Logística':'#f97316',
   'Investimentos':'#a855f7','Impostos':'#f59e0b','Financeiro':'#14b8a6',
-  'Financiamentos':'#14b8a6','Insumos':'#22c55e','Adm.':'#8891a6',
+  'Financiamentos':'#14b8a6','Insumos':'#22c55e','Adm.':'#6f8278',
   'Outros':'#64748b'
 };
 
@@ -617,8 +617,8 @@ function renderBreakdown(key, chartId, tblId) {
       datasets:[{
         label:'Gasto Jan–Mai',
         data:items.map(i=>i.val),
-        backgroundColor:items.map(i=>(GROUP_COLORS[i.group]||'#4f8ef7')+'44'),
-        borderColor:items.map(i=>GROUP_COLORS[i.group]||'#4f8ef7'),
+        backgroundColor:items.map(i=>(GROUP_COLORS[i.group]||'#0d9488')+'44'),
+        borderColor:items.map(i=>GROUP_COLORS[i.group]||'#0d9488'),
         borderWidth:1.5,borderRadius:3
       }]
     },
@@ -635,24 +635,24 @@ function renderBreakdown(key, chartId, tblId) {
     <th>#</th><th>Conta</th><th>Grupo</th><th>Valor Jan–Mai</th><th>% do Gasto Total</th>
   </tr></thead><tbody>`;
   items.forEach((item,idx)=>{
-    const color=GROUP_COLORS[item.group]||'#4f8ef7';
+    const color=GROUP_COLORS[item.group]||'#0d9488';
     const share=item.val/totalGasto;
     html+=`<tr>
-      <td style="color:#8891a6;font-size:11px">${idx+1}</td>
+      <td style="color:#6f8278;font-size:11px">${idx+1}</td>
       <td>${item.label}</td>
       <td><span style="color:${color};font-size:11px;font-weight:600">${item.group}</span></td>
-      <td style="font-weight:700;color:#fff">${fmtR(item.val)}</td>
+      <td style="font-weight:700;color:#14241c">${fmtR(item.val)}</td>
       <td>
         <div class="rank-bar" style="justify-content:flex-end">
-          <span style="font-size:11px;color:#8891a6;min-width:34px;text-align:right">${pct(share)}</span>
+          <span style="font-size:11px;color:#6f8278;min-width:34px;text-align:right">${pct(share)}</span>
           <div class="rank-fill" style="background:${color};width:${Math.round(share*80+4)}px;opacity:.7"></div>
         </div>
       </td>
     </tr>`;
   });
-  html+=`<tr style="font-weight:700;background:#181b26">
-    <td colspan="3" style="color:#8891a6">TOTAL GASTOS</td>
-    <td style="color:#fff">${fmtR(totalGasto)}</td><td></td>
+  html+=`<tr style="font-weight:700;background:#f3f7f4">
+    <td colspan="3" style="color:#6f8278">TOTAL GASTOS</td>
+    <td style="color:#14241c">${fmtR(totalGasto)}</td><td></td>
   </tr></tbody></table>`;
   document.getElementById(tblId).innerHTML=html;
 }
@@ -694,7 +694,7 @@ function renderCompany(key, kpiId, stripId, rvId, ebitdaId, custosId, brkChId, b
         x:{grid:gridCfg,ticks:tickCfg},
         yRec:{position:'left', grid:gridCfg,
           ticks:{...tickCfg,callback:v=>fmtR(v)},
-          title:{display:true,text:'Receita (Faturamento)',color:'#4f8ef7',font:{...baseFont,size:10}}},
+          title:{display:true,text:'Receita (Faturamento)',color:'#0d9488',font:{...baseFont,size:10}}},
         yRes:{position:'right', grid:{display:false},
           ticks:{...tickCfg,callback:v=>fmtR(v)},
           title:{display:true,text:'Resultado (Sobra)',color:d.totRes>=0?C.green:C.red,font:{...baseFont,size:10}}},
@@ -821,7 +821,7 @@ function renderContas() {
       '<td style="color:'+(good?C.green:C.red)+';font-weight:600">'+(varV>=0?'+':'')+fmtR(varV)+'</td>'+
       '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:44px">'+(ep*100).toFixed(1)+'%</span>'+
         '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+Math.min(ep*100,100)+'%"></div></div></div></td>'+
-      '<td style="color:#8891a6">'+fmtR(c.fy)+'</td>'+
+      '<td style="color:#6f8278">'+fmtR(c.fy)+'</td>'+
       '<td><span class="status-tag '+stCls+'">'+stTxt+'</span></td>'+
     '</tr>';
   });
@@ -840,7 +840,7 @@ function renderOxR() {
     const pct = orc !== 0 ? real/orc : (real===0?1:99);
     let color, txt;
     if(kind==='rev'){
-      if(pct>=1.02){color='#4ade80'; txt='acima da meta';}
+      if(pct>=1.02){color='#15803d'; txt='acima da meta';}
       else if(pct>=0.999){color='#22c55e'; txt='na meta';}
       else if(pct>=0.85){color='#f59e0b'; txt='abaixo da meta';}
       else {color='#ef4444'; txt='muito abaixo';}
@@ -966,7 +966,7 @@ function renderOxR() {
 
   // ── ICBIO: % atingido por mês ──
   const icbPct = ox.icbio.recReal.map((v,i)=>+(v/ox.icbio.recOrc[i]*100).toFixed(1));
-  const icbCol = icbPct.map(v=>v>=102?'#4ade80':v>=100?C.green:v>=85?C.yellow:C.red);
+  const icbCol = icbPct.map(v=>v>=102?'#15803d':v>=100?C.green:v>=85?C.yellow:C.red);
   mkChart('ch-oxr-exec',{type:'bar',
     data:{labels:ox.meses, datasets:[
       {label:'% da meta atingido', data:icbPct, backgroundColor:icbCol.map(c=>c+'55'), borderColor:icbCol, borderWidth:1.5, borderRadius:4},
@@ -991,7 +991,7 @@ function renderOxR() {
 
   // ── Tabela: projeção anual de faturamento por empresa ──
   function sevRec(ep){return ep>=1.02?'superado':ep>=0.999?'ok':ep>=0.85?'atencao':'critico';}
-  function sevColor(s){return s==='superado'?'#4ade80':s==='ok'?C.green:s==='atencao'?C.yellow:C.red;}
+  function sevColor(s){return s==='superado'?'#15803d':s==='ok'?C.green:s==='atencao'?C.yellow:C.red;}
   function sevTag(s){return s==='critico'?'badge-red':s==='atencao'?'badge-yellow':'badge-green';}
   function sevTxt(s){return s==='superado'?'Superado':s==='ok'?'Na meta':s==='atencao'?'Atenção':'Crítico';}
   const lista=[
@@ -1011,8 +1011,8 @@ function renderOxR() {
       '<td><div class="prog-cell"><span style="color:'+clr+';font-weight:700;min-width:44px">'+(ep*100).toFixed(1)+'%</span>'+
         '<div class="prog-track"><div class="prog-fill" style="background:'+clr+';width:'+Math.min(ep*100,100)+'%"></div></div></div></td>'+
       '<td>'+fmtR(projFY)+'</td>'+
-      '<td style="color:#8891a6">'+fmtR(e.recOrcFY)+'</td>'+
-      '<td style="color:'+(gap>=0?'#4ade80':C.red)+';font-weight:600">'+(gap>=0?'+':'')+fmtR(gap)+'</td>'+
+      '<td style="color:#6f8278">'+fmtR(e.recOrcFY)+'</td>'+
+      '<td style="color:'+(gap>=0?'#15803d':C.red)+';font-weight:600">'+(gap>=0?'+':'')+fmtR(gap)+'</td>'+
       '<td><span class="status-tag '+sevTag(s)+'">'+sevTxt(s)+'</span></td>'+
     '</tr>';
   });
@@ -1032,7 +1032,7 @@ function renderOxR() {
       '<td><span class="status-tag '+sevTag(s)+'">'+sevTxt(s)+'</span></td></tr>';
   });
   const tot=emp.icbio, tEp=tot.recReal/tot.recOrc, tS=sevRec(tEp), tClr=sevColor(tS);
-  h2+='<tr style="font-weight:700;background:#181b26"><td>YTD Jan–Mai</td><td style="color:#8891a6">'+fmtR(tot.recOrc)+'</td>'+
+  h2+='<tr style="font-weight:700;background:#f3f7f4"><td>YTD Jan–Mai</td><td style="color:#6f8278">'+fmtR(tot.recOrc)+'</td>'+
     '<td style="color:'+tClr+'">'+fmtR(tot.recReal)+'</td>'+
     '<td style="color:'+(tot.recReal-tot.recOrc>=0?C.green:C.red)+'">'+fmtR(tot.recReal-tot.recOrc)+'</td>'+
     '<td><div class="prog-cell"><span style="color:'+tClr+';font-weight:700;min-width:44px">'+(tEp*100).toFixed(1)+'%</span>'+
@@ -1226,8 +1226,8 @@ function renderPlano() {
       <div class="plano-sum-num" style="color:#22c55e">${ok}</div>
       <div class="plano-sum-label">Favoráveis</div>
     </div>
-    <div class="plano-sum-card" style="--a:#4f8ef7">
-      <div class="plano-sum-num" style="color:#4f8ef7">${PLANS.reduce((s,p)=>s+p.acoes.length,0)}</div>
+    <div class="plano-sum-card" style="--a:#0d9488">
+      <div class="plano-sum-num" style="color:#0d9488">${PLANS.reduce((s,p)=>s+p.acoes.length,0)}</div>
       <div class="plano-sum-label">Ações Recomendadas</div>
     </div>
     <div class="plano-sum-card" style="--a:#a855f7">
@@ -1255,7 +1255,7 @@ function renderPlano() {
         </div>
       </div>
       <div class="plano-actions">
-        <div style="font-size:10px;font-weight:700;color:#8891a6;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Ações Recomendadas</div>
+        <div style="font-size:10px;font-weight:700;color:#6f8278;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Ações Recomendadas</div>
         <ul>${p.acoes.map(a=>`<li>${a}</li>`).join('')}</ul>
       </div>
       <div class="plano-footer">
