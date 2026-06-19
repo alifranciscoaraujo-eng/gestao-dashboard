@@ -841,15 +841,15 @@ function renderOxR() {
     let color, txt;
     if(kind==='rev'){
       if(pct>=1.02){color='#15803d'; txt='acima da meta';}
-      else if(pct>=0.999){color='#22c55e'; txt='na meta';}
-      else if(pct>=0.85){color='#f59e0b'; txt='abaixo da meta';}
-      else {color='#ef4444'; txt='muito abaixo';}
+      else if(pct>=0.999){color='#16a34a'; txt='na meta';}
+      else if(pct>=0.85){color='#d97706'; txt='abaixo da meta';}
+      else {color='#dc2626'; txt='muito abaixo da meta';}
     } else if(kind==='exp'){
-      if(pct<=1.001){color='#22c55e'; txt='dentro do orçado';}
-      else if(pct<=1.05){color='#f59e0b'; txt='pouco acima';}
-      else {color='#ef4444'; txt='acima do orçado';}
+      if(pct<=1.001){color='#16a34a'; txt='dentro do orçado';}
+      else if(pct<=1.05){color='#d97706'; txt='pouco acima do orçado';}
+      else {color='#dc2626'; txt='acima do orçado';}
     } else {
-      color = real>=0 ? (real>=orc-1?'#22c55e':'#f59e0b') : '#ef4444';
+      color = real>=0 ? (real>=orc-1?'#16a34a':'#d97706') : '#dc2626';
       txt = real>=0 ? (real>=orc-1?'acima do previsto':'positivo (abaixo do previsto)') : 'negativo';
     }
     return {pct, color, txt};
@@ -891,16 +891,21 @@ function renderOxR() {
       pill = (delta>=0?'▲ +':'▼ ')+fmtR(delta)+' vs previsto';
       fill = real>=0 ? 100 : 18;
     } else {
-      const pctStr = (m.pct*100).toFixed(1)+'%';
-      const arrow = kind==='exp' ? (real>orc+1?'▲':'▼') : (real>=orc-1?'▲':'▼');
-      pill = arrow+' '+pctStr;
+      // mostra a VARIAÇÃO vs meta/orçado (não o % atingido, que confundia:
+      // 82,8% atingido NÃO é queda de 82,8%, e sim 17,2% abaixo da meta)
+      const dev = (m.pct - 1) * 100;
+      if(Math.abs(dev) < 0.05){ pill = '▬ no alvo'; }
+      else { pill = (dev>0?'▲ +':'▼ −')+Math.abs(dev).toFixed(1).replace('.',',')+'%'; }
       fill = Math.min(Math.max(m.pct*100,3),100);
     }
+    const pctRef = (m.pct*100).toFixed(1).replace('.',',');
+    const ref = kind==='rev' ? pctRef+'% da meta'
+              : kind==='exp' ? pctRef+'% do orçado' : '';
     return '<div class="emp-row">'+
       '<div class="emp-row-label"><span class="emp-row-icon">'+icon+'</span>'+label+'</div>'+
       '<div class="emp-row-vals">'+
         '<div class="emp-row-real" style="color:'+m.color+'">'+fmtR(real)+'</div>'+
-        '<div>orçado '+fmtR(orc)+'</div>'+
+        '<div>orçado '+fmtR(orc)+(ref?' · '+ref:'')+'</div>'+
       '</div>'+
       '<div class="emp-row-bar"><i style="width:'+fill+'%;background:'+m.color+'"></i></div>'+
       '<div style="grid-column:1/3;display:flex;justify-content:space-between;align-items:center;margin-top:4px">'+
